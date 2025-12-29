@@ -35,15 +35,15 @@ const SEED_USERS: User[] = [
 const SEED_RESOURCES: Resource[] = [
   {
     id: "p1",
-    name: "Indoor",
+    name: "Indoor1",
     type: "Indoor",
     pricePerHour: 30,
     image: "🏆",
   },
-  { id: "p2", name: "Indoor", type: "Indoor", pricePerHour: 28, image: "🎾" },
-  { id: "p3", name: "Indoor", type: "Indoor", pricePerHour: 28, image: "🎾" },
-  { id: "p4", name: "Indoor", type: "Indoor", pricePerHour: 20, image: "☀️" },
-  { id: "p5", name: "Indoor", type: "Indoor", pricePerHour: 20, image: "☀️" },
+  { id: "p2", name: "Indoor2", type: "Indoor", pricePerHour: 28, image: "🎾" },
+  { id: "p3", name: "Indoor3", type: "Indoor", pricePerHour: 28, image: "🎾" },
+  { id: "p4", name: "Indoor4", type: "Indoor", pricePerHour: 20, image: "☀️" },
+  { id: "p5", name: "Indoor5", type: "Indoor", pricePerHour: 20, image: "☀️" },
 ];
 
 // Générateur de quelques réservations pour peupler le planning
