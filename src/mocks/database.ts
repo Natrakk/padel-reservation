@@ -8,69 +8,54 @@ const SEED_USERS: User[] = [
     name: "Directeur Club",
     role: "admin",
     avatar: "👔",
+    phone: "06 00 00 00 00"
   },
   {
     id: "staff1",
     email: "staff@padel.com",
     name: "Accueil",
-    role: "admin",
+    role: "admin", // ou staff
     avatar: "🧢",
+    phone: "06 11 11 11 11"
   },
   {
     id: "u1",
     email: "jean@demo.com",
     name: "Jean Dupont",
     role: "client",
-    avatar: "🧔",
+    avatar: "Je", // Initiales ou Emoji
+    phone: "06 12 34 56 78" // <--- AJOUTÉ
   },
   {
     id: "u2",
     email: "sophie@demo.com",
     name: "Sophie Martin",
     role: "client",
-    avatar: "👩",
+    avatar: "So",
+    phone: "07 98 76 54 32" // <--- AJOUTÉ
   },
 ];
 
 const SEED_RESOURCES: Resource[] = [
-  {
-    id: "p1",
-    name: "Indoor1",
-    type: "Indoor",
-    pricePerHour: 30,
-    image: "🏆",
-  },
-  { id: "p2", name: "Indoor2", type: "Indoor", pricePerHour: 28, image: "🎾" },
-  { id: "p3", name: "Indoor3", type: "Indoor", pricePerHour: 28, image: "🎾" },
-  { id: "p4", name: "Indoor4", type: "Indoor", pricePerHour: 20, image: "☀️" },
-  { id: "p5", name: "Indoor5", type: "Indoor", pricePerHour: 20, image: "☀️" },
+  { id: "p1", name: "Indoor1", type: "Indoor2", pricePerHour: 40, image: "🏆" },
+  { id: "p2", name: "Indoor2", type: "Indoor", pricePerHour: 40, image: "🎾" },
+  { id: "p3", name: "Indoor3", type: "Indoor", pricePerHour: 40, image: "🎾" },
+  { id: "p4", name: "Indoor4", type: "Indoor", pricePerHour: 40, image: "☀️" },
+  { id: "p5", name: "Indoor5", type: "Indoor", pricePerHour: 40, image: "☀️" },
 ];
 
-// Générateur de quelques réservations pour peupler le planning
 const generateBookings = (): Booking[] => {
   const today = new Date().toISOString().split("T")[0];
   return [
     {
-      id: "b1",
-      resourceId: "p1",
-      userId: "u1",
-      start: `${today}T10:00:00.000Z`,
-      end: `${today}T11:00:00.000Z`,
-      status: "confirmed",
-      paymentStatus: "paid",
-      amountDue: 0,
-      checkedIn: true,
+      id: "b1", resourceId: "p1", userId: "u1",
+      start: `${today}T10:00:00.000Z`, end: `${today}T11:00:00.000Z`,
+      status: "confirmed", paymentStatus: "paid", amountDue: 0, checkedIn: true,
     },
     {
-      id: "b2",
-      resourceId: "p2",
-      userId: "u2",
-      start: `${today}T14:00:00.000Z`,
-      end: `${today}T15:00:00.000Z`,
-      status: "confirmed",
-      paymentStatus: "partial",
-      amountDue: 21,
-      checkedIn: false,
+      id: "b2", resourceId: "p2", userId: "u2",
+      start: `${today}T14:00:00.000Z`, end: `${today}T15:00:00.000Z`,
+      status: "confirmed", paymentStatus: "partial", amountDue: 21, checkedIn: false,
     },
   ];
 };
@@ -78,8 +63,11 @@ const generateBookings = (): Booking[] => {
 // --- SIMULATEUR DB (LOCALSTORAGE) ---
 class MockDB {
   private get<T>(key: string, seed: T): T {
+    // Note: Pour éviter les problèmes de cache pendant le dév, 
+    // on peut commenter la lecture du localStorage si on veut forcer le seed
     const stored = localStorage.getItem(`mock_${key}`);
     if (stored) return JSON.parse(stored);
+
     localStorage.setItem(`mock_${key}`, JSON.stringify(seed));
     return seed;
   }
@@ -88,18 +76,10 @@ class MockDB {
     localStorage.setItem(`mock_${key}`, JSON.stringify(data));
   }
 
-  // Getters
-  get users(): User[] {
-    return this.get("users", SEED_USERS);
-  }
-  get resources(): Resource[] {
-    return this.get("resources", SEED_RESOURCES);
-  }
-  get bookings(): Booking[] {
-    return this.get("bookings", generateBookings());
-  }
+  get users(): User[] { return this.get("users", SEED_USERS); }
+  get resources(): Resource[] { return this.get("resources", SEED_RESOURCES); }
+  get bookings(): Booking[] { return this.get("bookings", generateBookings()); }
 
-  // Actions
   addUser(user: User) {
     const users = this.users;
     users.push(user);
@@ -114,9 +94,7 @@ class MockDB {
   }
 
   updateBooking(updatedBooking: Booking) {
-    const bookings = this.bookings.map((b) =>
-      b.id === updatedBooking.id ? updatedBooking : b
-    );
+    const bookings = this.bookings.map((b) => b.id === updatedBooking.id ? updatedBooking : b);
     this.set("bookings", bookings);
     return updatedBooking;
   }

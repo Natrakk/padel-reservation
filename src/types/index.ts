@@ -1,35 +1,36 @@
-export type Role = "admin" | "client" | "staff";
-
 export interface User {
   id: string;
-  email: string;
   name: string;
-  role: Role;
+  email: string;
+  role: 'admin' | 'staff' | 'client';
   avatar?: string;
+  phone?: string; // <--- AJOUT ICI
 }
 
 export interface Resource {
   id: string;
   name: string;
-  type: "Indoor" | "Outdoor";
+  type: string;
   pricePerHour: number;
-  image: string;
+  image?: string;
 }
 
 export interface Booking {
   id: string;
   resourceId: string;
   userId: string;
-  start: string; // ISO String
-  end: string; // ISO String
-  status: "confirmed" | "cancelled";
-  paymentStatus: "paid" | "partial" | "pending";
-  amountDue: number; // Reste à payer
-  checkedIn: boolean; // Le joueur est-il arrivé ?
+  start: string;
+  end: string;
+  status: 'confirmed' | 'cancelled';
+  paymentStatus: 'paid' | 'pending' | 'partial';
+  amountDue: number;
+  checkedIn?: boolean;
 }
 
-// Type étendu pour l'admin (inclut les infos user)
-export interface AdminBookingView extends Booking {
+// Votre type étendu pour l'interface
+export interface ExtendedBooking extends Booking {
   user?: User;
   resourceName?: string;
+  paidSeats?: number;
+  rackets?: number;
 }
